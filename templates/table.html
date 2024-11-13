@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data for Last 2 Weeks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="center-object">
+        <h1>Data for Last 2 Weeks</h1> <br>
+    </div>
+    <div class="center-object">
+        <table class="myTable">
+            <tr>
+                <th>ID</th>
+                <th>Epoch Time</th>
+                <th>Temperature 1</th>
+                <th>Temperature 2</th>
+                <th>Distance 1</th>
+                <th>Distance 2</th>
+            </tr>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.epoch_time }}</td>
+                <td>{{ row.temp1 }}</td>
+                <td>{{ row.temp2 }}</td>
+                <td>{{ row.dist1 }}</td>
+                <td>{{ row.dist2 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

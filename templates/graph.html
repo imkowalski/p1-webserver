@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Graphs for Last 2 Weeks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="image-grid">
+        <div class="box">
+            <img src="/view_graph/temp1" alt="Temperature 1 Graph">
+        </div>
+        <div class="box">
+            <img src="/view_graph/temp2" alt="Temperature 2 Graph">
+        </div>
+        <div class="box">
+            <img src="/view_graph/dist1" alt="Distance 1 Graph">
+        </div>
+        <div class="box">
+            <img src="/view_graph/dist2" alt="Distance 2 Graph">
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

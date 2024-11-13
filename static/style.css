@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 100%;
+    padding: 10px;
+}
+
+.image-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Media query for screens smaller than 800px */
+@media (max-width: 800px) {
+    .image-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.center-object {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* or specify a specific height */
+}
+.myTable {
+    background-color: #eee;
+    border-collapse: collapse;
+    max-width: 100%;
+}
+.myTable th {
+    background-color: #000;
+    color: white;
+    width: 150%;
+}
+.myTable td,
+.myTable th {
+    padding: 5px;
+    border: 1px solid #000;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: bolder;
+}
+a:hover {
+    color: rgb(71, 71, 71);
+}
