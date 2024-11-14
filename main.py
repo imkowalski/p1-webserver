@@ -54,53 +54,25 @@ def view_data():
 
     return render_template('table.html', rows=rows)
 
-@app.route('/view_graph/<string:graph_type>', methods=['GET'])
-def view_graph(graph_type):
-    two_weeks_ago = int(time.time()) - 2 * 7 * 24 * 60 * 60
-    rows = Data.query.filter(Data.epoch_time >= two_weeks_ago).all()
-
-    dates = [datetime.fromtimestamp(row.epoch_time).date() for row in rows]
-    
-    if graph_type == 'temp1':
-        values = [row.temp1 for row in rows]
-        label = 'Temperature 1'
-    elif graph_type == 'temp2':
-        values = [row.temp2 for row in rows]
-        label = 'Temperature 2'
-    elif graph_type == 'dist1':
-        values = [row.dist1 for row in rows]
-        label = 'Distance 1'
-    elif graph_type == 'dist2':
-        values = [row.dist2 for row in rows]
-        label = 'Distance 2'
-    else:
-        return "Invalid graph type", 400
-
-
-
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(dates, values, label=label)
-    
-    # Format x-axis labels as 'Today', '1 day ago', '2 days ago', and so on
-    plt.xticks(dates, [f'{(datetime.now().date() - date).days} days ago' if (datetime.now().date() - date).days > 0 else 'Today' for date in dates], rotation=45)
-    
-    plt.xlabel('Date')
-    plt.ylabel('Values')
-    plt.title(f'{label} for Last 14 Days')
-    plt.legend()
-    plt.grid(True)
-
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-
-    return send_file(img, mimetype='image/png')
 
 @app.route('/about', methods=['GET'])
 def about_page():
     return render_template('about.html')
 
+@app.route('/view_graph_data', methods=['GET'])
+def view_graph_data():
+    two_weeks_ago = int(time.time()) - 2 * 7 * 24 * 60 * 60
+    rows = Data.query.filter(Data.epoch_time >= two_weeks_ago).all()
+
+    data = {
+        'dates': [datetime.fromtimestamp(row.epoch_time).strftime('%Y-%m-%d') for row in rows],
+        'temp1': [row.temp1 for row in rows],
+        'temp2': [row.temp2 for row in rows],
+        'dist1': [row.dist1 for row in rows],
+        'dist2': [row.dist2 for row in rows]
+    }
+
+    return jsonify(data)
 
 @app.route('/graph', methods=['GET'])
 def view_graph_page():
@@ -108,4 +80,4 @@ def view_graph_page():
     return render_template('graph.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host="0.0.0.0")
