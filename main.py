@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
 
-API_KEY = '#Kadet69'
+API_KEY = 'SmileAndWave'
 
 app.static_folder = 'static'
 
