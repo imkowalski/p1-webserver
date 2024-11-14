@@ -11,15 +11,18 @@
             const response = await fetch('/view_graph_data');
             const data = await response.json();
             
-            const labels = data.dates.map((date, index) => {
-                const daysAgo = (new Date() - new Date(date)) / (1000 * 60 * 60 * 24);
-                return daysAgo === 0 ? 'Today' : `${Math.floor(daysAgo)} days ago`;
+            const currentDate = new Date();
+            const labels = data.dates.map(date => {
+                const d = new Date(date);
+                const diffTime = Math.abs(currentDate - d);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `${diffDays} days ago`;
             });
 
             const temp1Data = {
                 labels: labels,
                 datasets: [{
-                    label: 'Temperature 1',
+                    label: 'Temeratur i sandfangeren',
                     data: data.temp1,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -27,19 +30,6 @@
                     tension: 0.4
                 }]
             };
-
-            const temp2Data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Temperature 2',
-                    data: data.temp2,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            };
-
             const dist1Data = {
                 labels: labels,
                 datasets: [{
@@ -67,25 +57,83 @@
             new Chart(document.getElementById('temp1Chart'), {
                 type: 'line',
                 data: temp1Data,
-                options: {}
+                options: {
+                    scales: {
+                        x: {
+                            type: 'category',
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                callback: function(value, index, values) {
+                                    const date = new Date(data.dates[index]);
+                                    return index === 0 || date.getDate() !== new Date(data.dates[index - 1]).getDate() ? date.toLocaleDateString() : '';
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: true
+                            }
+                        }
+                    }
+                }
             });
 
-            new Chart(document.getElementById('temp2Chart'), {
-                type: 'line',
-                data: temp2Data,
-                options: {}
-            });
 
             new Chart(document.getElementById('dist1Chart'), {
                 type: 'line',
                 data: dist1Data,
-                options: {}
+                options: {
+                    scales: {
+                        x: {
+                            type: 'category',
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                callback: function(value, index, values) {
+                                    const date = new Date(data.dates[index]);
+                                    return index === 0 || date.getDate() !== new Date(data.dates[index - 1]).getDate() ? date.toLocaleDateString() : '';
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: true
+                            }
+                        }
+                    }
+                }
             });
 
             new Chart(document.getElementById('dist2Chart'), {
                 type: 'line',
                 data: dist2Data,
-                options: {}
+                options: {
+                    scales: {
+                        x: {
+                            type: 'category',
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                callback: function(value, index, values) {
+                                    const date = new Date(data.dates[index]);
+                                    return index === 0 || date.getDate() !== new Date(data.dates[index - 1]).getDate() ? date.toLocaleDateString() : '';
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: true
+                            }
+                        }
+                    }
+                }
             });
         }
 
@@ -98,9 +146,6 @@
     <div class="image-grid">
         <div class="box">
             <canvas id="temp1Chart"></canvas>
-        </div>
-        <div class="box">
-            <canvas id="temp2Chart"></canvas>
         </div>
         <div class="box">
             <canvas id="dist1Chart"></canvas>

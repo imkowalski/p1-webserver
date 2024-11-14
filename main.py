@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
 
-API_KEY = 'Secret_code'
+API_KEY = '#Kadet69'
 
 app.static_folder = 'static'
 
@@ -18,7 +18,6 @@ class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     epoch_time = db.Column(db.Integer, nullable=False)
     temp1 = db.Column(db.Float, nullable=False)
-    temp2 = db.Column(db.Float, nullable=False)
     dist1 = db.Column(db.Float, nullable=False)
     dist2 = db.Column(db.Float, nullable=False)
 
@@ -39,13 +38,12 @@ def add_data():
     new_data = Data(
         epoch_time=epoch_time,
         temp1=data['temp1'],
-        temp2=data['temp2'],
         dist1=data['dist1'],
         dist2=data['dist2']
     )
     db.session.add(new_data)
     db.session.commit()
-    return jsonify({'message': 'Data added successfully!'}), 201
+    return jsonify({'message': 'Data added successfully'}), 201
 
 @app.route('/view_data', methods=['GET'])
 def view_data():
@@ -61,18 +59,15 @@ def about_page():
 
 @app.route('/view_graph_data', methods=['GET'])
 def view_graph_data():
-    two_weeks_ago = int(time.time()) - 2 * 7 * 24 * 60 * 60
-    rows = Data.query.filter(Data.epoch_time >= two_weeks_ago).all()
+    two_weeks_ago = datetime.now() - timedelta(days=14)
+    data = Data.query.filter(Data.epoch_time >= int(two_weeks_ago.timestamp())).all()
+    dates = [datetime.fromtimestamp(d.epoch_time).isoformat() for d in data]
+    temp1 = [d.temp1 for d in data]
+    dist1 = [d.dist1 for d in data]
+    dist2 = [d.dist2 for d in data]
+    return jsonify({'dates': dates, 'temp1': temp1, 'dist1': dist1, 'dist2': dist2})
 
-    data = {
-        'dates': [datetime.fromtimestamp(row.epoch_time).strftime('%Y-%m-%d') for row in rows],
-        'temp1': [row.temp1 for row in rows],
-        'temp2': [row.temp2 for row in rows],
-        'dist1': [row.dist1 for row in rows],
-        'dist2': [row.dist2 for row in rows]
-    }
 
-    return jsonify(data)
 
 @app.route('/graph', methods=['GET'])
 def view_graph_page():
