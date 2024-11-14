@@ -30,6 +30,17 @@ def check_api_key():
     if api_key != API_KEY:
         abort(401)
 
+@app.route('/', methods=['GET'])
+def index():
+    html = '''
+    Avalible endpoints
+    <a href="/add_data">/add_data</a> (requires api_key)
+    <a href="/view_data">/view_data</a>
+    <a href="/graph">/graph</a>
+    <a href="/about">/about</a>
+
+    '''
+
 @app.route('/add_data', methods=['POST'])
 def add_data():
     check_api_key()
