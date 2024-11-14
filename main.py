@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, abort, render_template
+from flask import Flask, request, jsonify, send_file, abort, render_template, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 import time
 import matplotlib.pyplot as plt
@@ -38,8 +38,8 @@ def index():
     <a href="/view_data">/view_data</a>
     <a href="/graph">/graph</a>
     <a href="/about">/about</a>
-
     '''
+    return render_template_string(html)
 
 @app.route('/add_data', methods=['POST'])
 def add_data():
